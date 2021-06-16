@@ -9,9 +9,9 @@ import uuid
 
 class Article(models.Model):
 
-    class ArticleObjects(models.Model):
+    class ArticleObjects(models.Manager):
         def get_queryset(self):
-            return super().get_queryset.filter(status='published')
+            return super().get_queryset().filter(status='published')
 
     STATUS_CHOICES = (('draft', 'Draft'), ('published', 'Published'),)
 
@@ -19,14 +19,19 @@ class Article(models.Model):
     author = models.ForeignKey(SellerUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField()
-    price = models.FloatField()
+    price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField()
     slug = models.SlugField(blank=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='draft')
+    objects = models.Manager()
+    articleobjects = ArticleObjects()
     # relationship one to many imgs
+
+    # class Meta:
+    #     ordering = ('-published',)
 
 
 class Order(models.Model):
