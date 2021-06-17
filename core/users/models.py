@@ -15,6 +15,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=150)
     # favoritos
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
@@ -60,6 +61,7 @@ class Question(models.Model):
         'articles.Article', on_delete=models.CASCADE)
     message = models.CharField(max_length=120)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
 
 class Answer(models.Model):
@@ -70,3 +72,4 @@ class Answer(models.Model):
         Question, on_delete=models.CASCADE)
     message = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)

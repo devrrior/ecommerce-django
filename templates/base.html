@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.0.1/dist/lux/bootstrap.min.css"
+		integrity="undefined" crossorigin="anonymous">
+	<title>{% block title %}{% endblock title %}</title>
+	<style media="screen">
+		@media (min-width: 992px) {
+			.mobile-icon {
+				display: none;
+			}
+
+
+			.navbar {
+				padding: 1rem 7rem;
+			}
+
+		}
+
+		@media (max-width:992px) {
+			.mobile-icon1 {
+				display: none;
+			}
+
+			.navbar {
+				padding-top: 1.5rem;
+				padding-bottom: 1.5rem;
+				padding-left: 1rem;
+				padding-right: 1rem;
+			}
+	</style>
+</head>
+
+<body>
+
+
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+		<symbol id="ecommerce" viewBox="0 0 512.005 512.005">
+			<title>Ecommerce</title>
+			<path
+				d="m507.505 116.364c-3.798-4.66-9.491-7.364-15.502-7.364h-362.257l-1.493-13.644c-.016-.142-.033-.284-.051-.426-7.101-54.118-53.616-94.93-108.199-94.93-11.046 0-20 8.954-20 20s8.954 20 20 20c34.508 0 63.926 25.751 68.513 59.934l28.754 262.769c2.646 24.178 15.816 44.82 34.659 57.577-26.139 38.445 2.253 91.998 49.074 91.72 39.778.551 69.171-40.626 55.861-78h86.277c-13.304 37.378 16.077 78.55 55.862 78 78.267-3.238 78.252-114.769-.001-118h-202.207c-20.444 0-37.539-15.326-39.763-35.649l-.585-5.351h244.65c37.783 0 70.737-26.86 78.356-63.867l10.521-51.1c1.212-5.889-.289-12.01-4.087-16.669-3.798-4.66-9.491-7.364-15.502-7.364h-89.958l5.2-65h81.839l-.405 1.967c-2.227 10.819 4.737 21.395 15.556 23.622 1.361.28 2.717.415 4.054.415 9.292-.001 17.621-6.513 19.568-15.971l5.353-26c1.212-5.888-.289-12.01-4.087-16.669zm-108.502 317.636c10.477 0 19 8.523 19 19-1.044 25.206-36.96 25.199-38 0 0-10.477 8.523-19 19-19zm-198 0c10.477 0 19 8.523 19 19-1.044 25.206-36.96 25.199-38 0 0-10.477 8.523-19 19-19zm-66.88-285h78.255l5.2 65h-76.342zm17.947 164-6.456-59h75.165l4.72 59zm180.308 0h-66.752l-4.72-59h76.192zm7.92-99h-82.592l-5.2-65h92.992zm105.55 40-5.573 27.066c-3.81 18.504-20.286 31.934-39.178 31.934h-28.591l4.72-59z" />
+	</svg>
+
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<div class="dropdown text-end mobile-icon">
+				<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+					data-bs-toggle="dropdown" aria-expanded="false">
+					<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+				</a>
+				<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+					<li><a class="dropdown-item" href="#">New project...</a></li>
+					<li><a class="dropdown-item" href="#">Settings</a></li>
+					<li><a class="dropdown-item" href="#">Profile</a></li>
+					<li>
+						<hr class="dropdown-divider">
+					</li>
+					<li><a class="dropdown-item" href="#">Sign out</a></li>
+				</ul>
+			</div>
+			<a href="/" class="navbar-brand">
+				<svg class="bi me-2" width="54" height="54" role="img" aria-label="Ecommerce">
+					<use xlink:href="#ecommerce" /></svg>
+			</a>
+
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Customers</a>
+					</li>
+					<li class="nav-item">
+						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Products</a>
+					</li>
+				</ul>
+				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+					<input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+				</form>
+				<div class="dropdown text-end mobile-icon1">
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+						data-bs-toggle="dropdown" aria-expanded="false">
+						<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+					</a>
+					<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+						<li><a class="dropdown-item" href="#">New project...</a></li>
+						<li><a class="dropdown-item" href="#">Settings</a></li>
+						<li><a class="dropdown-item" href="#">Profile</a></li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li><a class="dropdown-item" href="#">Sign out</a></li>
+					</ul>
+				</div>
+			</div>
+
+
+		</div>
+	</nav>
+
+
+	<main class="container my-5">
+		{% block content %}{% endblock content %}
+	</main>
+
+
+	<footer class="footer mt-auto py-3 bg-light">
+		<div class="container">
+			<span class="text-muted">www.ecommerce.com | Design by Fernado Guerrero</span>
+		</div>
+	</footer>
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
+	</script>
+</body>
+
+</html>

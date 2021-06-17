@@ -22,16 +22,16 @@ class Article(models.Model):
     price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField()
     slug = models.SlugField(blank=False, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='draft')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     objects = models.Manager()
     articleobjects = ArticleObjects()
-    # relationship one to many imgs
 
-    # class Meta:
-    #     ordering = ('-published',)
+    class Meta:
+        ordering = ('-created_at',)
 
 
 class Order(models.Model):
@@ -57,3 +57,12 @@ class OrderItem(models.Model):
         Order, on_delete=models.SET_NULL, null=True)
     ordered = models.BooleanField(default=False)
     quantity = models.IntegerField(default=1, null=True, blank=True)
+
+
+class ImageArticle(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    image = models.ImageField(
+        upload_to=f"images/article/",)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
