@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
 
 from core.users.models import CustomUser, SellerUser
 
@@ -21,7 +23,7 @@ class Article(models.Model):
     description = models.TextField()
     price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField()
-    slug = models.SlugField(blank=False, unique=True)
+    slug = models.SlugField(blank=True, unique=True)
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -30,8 +32,20 @@ class Article(models.Model):
     objects = models.Manager()
     articleobjects = ArticleObjects()
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         ordering = ('-created_at',)
+
+    @staticmethod
+    def set_slug(sender, instance, *args, **kwargs):
+        if instance.slug:
+            return
+        instance.slug = slugify('{}-{}'.format(instance.title, instance.id))
+
+
+pre_save.connect(Article.set_slug, sender=Article)
 
 
 class Order(models.Model):
@@ -66,3 +80,6 @@ class ImageArticle(models.Model):
         upload_to=f"images/article/",)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.article.title}-{self.id}'

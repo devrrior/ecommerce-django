@@ -32,6 +32,9 @@ class SellerUser(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.first_name
+
 
 # Temporal sections
 # I don't now if this will be here, I think I will create a new app
@@ -49,6 +52,9 @@ class Address(models.Model):
     phone = models.CharField(_("Phone Number"), max_length=50)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Addresses"
 
 # Remember a vendedor is equal a customer
 
