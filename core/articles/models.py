@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 
-from core.users.models import CustomUser, SellerUser
+from core.users.models import CustomUser
 
 import uuid
 
@@ -18,7 +18,7 @@ class Article(models.Model):
     STATUS_CHOICES = (('draft', 'Draft'), ('published', 'Published'),)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    author = models.ForeignKey(SellerUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField()
     price = models.PositiveIntegerField()
@@ -55,8 +55,7 @@ class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(
         CustomUser, null=True, on_delete=models.SET_NULL)
-    seller = models.ForeignKey(
-        SellerUser, null=True, on_delete=models.SET_NULL)
+    seller_if = models.UUIDField(default=1)
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default=None)
     ordered = models.BooleanField(default=False)
@@ -76,8 +75,7 @@ class OrderItem(models.Model):
 class ImageArticle(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    image = models.ImageField(
-        upload_to=f"images/article/",)
+    image = models.ImageField(upload_to="images/article/",)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

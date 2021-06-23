@@ -13,6 +13,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'), unique=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
+    profile_picture = models.ImageField(
+        upload_to='images/profile/', null=True, blank=True)
     # favoritos
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -26,14 +28,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
-
-
-class SellerUser(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user.first_name
 
 
 # Temporal sections
@@ -73,7 +67,7 @@ class Question(models.Model):
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(
-        SellerUser,  on_delete=models.CASCADE)
+        CustomUser,  on_delete=models.CASCADE)
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE)
     message = models.CharField(max_length=256)
