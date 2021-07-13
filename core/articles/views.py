@@ -24,8 +24,11 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         article.save()
         images = self.request.FILES.getlist('images')
 
+        order = 0
+
         for image in images:
+            order += 1
             ImageArticle.objects.create(
-                article=article, image=image, article_status=article.status)
+                article=article, image=image, article_status=article.status, order=order)
 
         return super().form_valid(form)

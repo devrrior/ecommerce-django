@@ -17,6 +17,11 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['image_article'] = ImageArticle.imagearticleobjects.all()
-        print(context)
+        images_article = ImageArticle.imagearticleobjects.all()
+        for article in context['object_list']:
+            for image_article in images_article:
+                if article.id == image_article.article_id:
+                    article.image_article = image_article
+
+        # print('imagen', context['object_list'][0].image_article.url)
         return context

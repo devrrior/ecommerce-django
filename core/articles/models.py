@@ -23,7 +23,7 @@ class Article(models.Model):
     description = models.TextField()
     price = models.PositiveIntegerField()
     stock = models.PositiveIntegerField()
-    slug = models.SlugField(blank=True, unique=True)
+    slug = models.SlugField(blank=True, unique=True, max_length=256)
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,13 +52,14 @@ class ImageArticle(models.Model):
 
     class ImageArticleObjects(models.Manager):
         def get_queryset(self):
-            return super().get_queryset().filter(status='published')
+            return super().get_queryset().filter(article_status='published', order=1)
 
     STATUS_CHOICES = (('draft', 'Draft'), ('published', 'Published'),)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images/article/",)
+    order = models.PositiveIntegerField()
     article_status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)

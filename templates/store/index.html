@@ -11,13 +11,14 @@
 		{% for article in object_list %}
 			<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xxl-2.4 my-2">
 				<div class="card">
-					<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbetanews.com%2Fwp-content%2Fuploads%2F2014%2F11%2Ffront.jpg&f=1&nofb=1"
-						class="card-img-top" alt="..." height="200" width="200">
-					<div class="card-body" style="min-height: 220px; max-height: 220px;">
+					<img src={{ article.image_article.image.url }} class="card-img-top" alt="..." height="200" style="object-fit:cover;">
+					<div class="card-body">
 						<h5 class="card-title text-dark">{{ article.title }}</h5>
-						<p class="card-text text-body">{{ article.description }}</p>
-						<a href="#" class="btn btn-primary mx-2">Add to cart</a>
-						<a href="#" class="card-link">See more</a>
+						<p class="card-text text-body">{{ article.description | truncatechars:112 }}</p>
+						<div class="mt-auto">
+							<a href="#" class="btn btn-primary mx-2">Add to cart</a>
+							<a href="#" class="card-link">See more</a>
+						</div>
 					</div>
 				</div>
 			</div>
