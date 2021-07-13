@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from core.store.views import ArticleListView
 
 urlpatterns = [
     # Home page
-    path('', views.index, name='store.home_page')
+    path('', ArticleListView.as_view(), name='store.home_page')
 ]

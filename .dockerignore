@@ -1,0 +1,7 @@
+*/.vim
+*/.vscode
+*/.git
+*/.idea
+*/.coverage
+*/.DS_Store
+*/db.sqlite3

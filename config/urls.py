@@ -21,12 +21,16 @@ from django.contrib.auth import views
 
 from core.users.views import UserCreateView
 
+from django_email_verification import urls as email_urls  # include the urls
+
+
 urlpatterns = [
     path('', include('core.store.urls'), name='store'),
     path('articles/', include('core.articles.urls'), name='articles'),
     path('admin/', admin.site.urls),
     path('login/', views.LoginView.as_view(redirect_authenticated_user=True)),
     path('signup/', UserCreateView.as_view(), name='signup'),
+    path('email/', include(email_urls)),  # connect them to an arbitrary path
     path('', include('django.contrib.auth.urls')),
 ]
 

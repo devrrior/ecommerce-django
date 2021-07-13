@@ -48,6 +48,32 @@ class Article(models.Model):
 pre_save.connect(Article.set_slug, sender=Article)
 
 
+class ImageArticle(models.Model):
+
+    class ImageArticleObjects(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+
+    STATUS_CHOICES = (('draft', 'Draft'), ('published', 'Published'),)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="images/article/",)
+    article_status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='draft')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+    imagearticleobjects = ImageArticleObjects()
+
+    def __str__(self):
+        return f'{self.article.title}-{self.id}'
+
+    class Meta:
+        ordering = ('-created_at',)
+
+
 class Order(models.Model):
     STATUS_CHOICES = (('pending', 'Pending'),
                       ('delivered', 'Deliverded'),)
@@ -70,14 +96,3 @@ class OrderItem(models.Model):
         Order, on_delete=models.SET_NULL, null=True)
     ordered = models.BooleanField(default=False)
     quantity = models.IntegerField(default=1, null=True, blank=True)
-
-
-class ImageArticle(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="images/article/",)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.article.title}-{self.id}'

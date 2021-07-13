@@ -2,6 +2,12 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.views import View
+
+from django_email_verification import send_email
 
 
 from core.users.models import CustomUser
@@ -22,4 +28,8 @@ class UserCreateView(CreateView):
         new_user = form.save()
         messages.success(self.request, 'Account Created successfully')
 
-        return super().form_valid(form)
+        returnVal = super(UserCreateView, self).form_valid(form)
+
+        send_email(new_user)
+
+        return returnVal

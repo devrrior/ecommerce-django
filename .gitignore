@@ -1,13 +1,14 @@
-env/
-.vscode/
 *.log
 *.pot
 *.pyc
-__pycache__/
 .env
 db.sqlite3
 .vim
 .idea
 .coverage
+env/
+.vscode/
+__pycache__/
 htmlcov/
 media/
+ecommerce-postgres/

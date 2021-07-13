@@ -1,6 +1,4 @@
-from django.urls import path
-
-from core.users.views import UserCreateView
+from django.urls import path, include
 
 urlpatterns = [
     # Registration User Page

@@ -4,9 +4,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-from .models import Article, ImageArticle
+from core.articles.models import Article, ImageArticle
 
-from .forms import ArticleForm
+from core.articles.forms import ArticleForm
 
 # Create your views here.
 
@@ -25,6 +25,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         images = self.request.FILES.getlist('images')
 
         for image in images:
-            ImageArticle.objects.create(article=article, image=image)
+            ImageArticle.objects.create(
+                article=article, image=image, article_status=article.status)
 
         return super().form_valid(form)

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Confirmation email - Ecommerce{% endblock title %}
+{% block content %}
+	<!-- <h1 class="text-center my-4">Email verification</h1> -->
+	{% if success %}
+	<div class="card">
+		<div class="card-header">
+			Email Verification
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Completed process!</h5>
+			<p class="card-text">{{ user.first_name }} {{ user.last_one }}, your account is confirmed!</p>
+			<a href="{% url 'login' %}" class="btn btn-primary">Go login</a>
+		</div>
+	</div>
+	{% else %}
+	<div class="card">
+		<div class="card-header">
+			Email Verification
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Invalid process!</h5>
+			<p class="card-text">Error, invalid token</p>
+			<a href="{% url 'signup' %}" class="btn btn-primary">Go signup</a>
+		</div>
+	</div>
+	{% endif %}
+{% endblock content %}

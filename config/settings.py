@@ -25,11 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'widget_tweaks',
+    'django_email_verification',
     'core.articles.apps.ArticleConfig',
     'core.users.apps.UserConfig',
     'core.store.apps.StoreConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -84,10 +85,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# SQLITE3
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env.str('POSTGRES_DB'),
+        'USER': env.str('POSTGRES_USER'),
+        'PASSWORD': env.str('POSTGRES_PASSWORD'),
+        'HOST': env.str('DB_HOST'),
+        'PORT': env.int('DB_PORT')
     }
 }
 
@@ -125,11 +138,41 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# Static Configuration
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
+# Media Configuration
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Email Verification Config
+
+
+def verified_callback(user):
+    user.is_active = True
+
+
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = '1testgproject@gmail.com'
+EMAIL_MAIL_SUBJECT = 'Confirm your email - Ecommerce'
+EMAIL_MAIL_HTML = 'email_verification/mail_body.html'
+EMAIL_MAIL_PLAIN = 'email_verification/mail_body.txt'
+EMAIL_TOKEN_LIFE = 60 * 60
+EMAIL_PAGE_TEMPLATE = 'email_verification/confirm_template.html'
+EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000/'
+
+# SMTP Configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
