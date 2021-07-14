@@ -1,0 +1,35 @@
+.product .main-img {
+  height: 350px;
+}
+
+.product .main-img img {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.product .thumb-img .box {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  border: 1px solid #afafc1;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.product .thumb-img .box.active {
+  border-color: #605d5d;
+  border-width: 2px;
+}
+
+.product .thumb-img {
+  text-align: center;
+}
+
+.product .thumb-img .box img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}

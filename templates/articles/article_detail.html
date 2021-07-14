@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Ecommerce - New Article{% endblock %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'css/article_detail.css' %}" type="text/css" media="screen" title="no title" charset="utf-8">
+{% endblock head %}
+
+{% block content %}
+	<div class="row">
+		<div class="product col-5">
+			<div class="main-img">
+				<img src="{{ article.images.0.image.url }}"  class="pro-img" alt="{{ article.images.0.title }}">	
+			</div>
+			<div class="thumb-img mt-4">
+				{% for image_article in article.images %}
+					<div class="box" onclick="changeImage(this)">
+						<img src="{{ image_article.image.url }}" alt="{{ article.images.0.title }}">
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-7">
+			<h1>{{ article.title }}</h1>
+			<p>{{ article.description }}</p>
+			<p>Stock: {{ article.stock }}</p>
+			<p>Price: ${{ article.price }} dls</p>
+		</div>
+
+	</div>
+	<script src="{% static 'js/article_detail.js' %}" charset="utf-8"></script>
+{% endblock content %}

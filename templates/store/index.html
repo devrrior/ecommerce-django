@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 {% block title %}Ecommerce - Home{% endblock %}
 {% block content %}
+{% block head %}
+<style>
+	.title-link{
+		text-decoration: none;
+	}	
+
+	.title-link:hover{
+		color: #777575;
+		text-decoration: underline;
+	}
+
+</style>	
+{% endblock head %}
 <div>
 <!-- ((article.imagearticle_set.all())[0]).image.url -->
 	<h2 class="text-center">Lastest Articles</h2>
@@ -11,14 +24,15 @@
 		{% for article in object_list %}
 			<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xxl-2.4 my-2">
 				<div class="card">
-					<img src={{ article.image_article.image.url }} class="card-img-top" alt="..." height="200" style="object-fit:cover;">
-					<div class="card-body">
-						<h5 class="card-title text-dark">{{ article.title }}</h5>
+					<a href="{% url 'article.detail_article' article.slug %}">
+						<img src={{ article.image_article.image.url }} class="card-img-top" alt={{ article.title }} height="200" style="object-fit: contain;">
+					</a>
+					<div class="card-body" style="min-height: 20%; max-height: 20%;">
+						<h5 class="card-title text-dark"><a class="title-link" href="{% url 'article.detail_article' article.slug %}">{{ article.title | truncatechars:40 }}</a></h5>
 						<p class="card-text text-body">{{ article.description | truncatechars:112 }}</p>
-						<div class="mt-auto">
-							<a href="#" class="btn btn-primary mx-2">Add to cart</a>
-							<a href="#" class="card-link">See more</a>
-						</div>
+						<p class="d-inline">Price:</p>
+						<p class="d-inline" style="color: #4baa23; text-decoration: underline;">${{ article.price }}</p>
+						<p class="d-inline">dls</p>
 					</div>
 				</div>
 			</div>
