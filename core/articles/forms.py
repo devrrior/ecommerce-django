@@ -1,8 +1,21 @@
 from django import forms
+
+
 from core.articles.models import Article
+from core.cart.models import OrderItem
 
 
-class ArticleForm(forms.ModelForm):
+class AddToCartForm(forms.ModelForm):
+
+    class Meta:
+        model = OrderItem
+        fields = ('quantity',)
+
+        widgets = {
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'})}
+
+
+class CreateArticleForm(forms.ModelForm):
     images = forms.FileField(
         required=True, widget=forms.FileInput(attrs={
             'class': 'form-control',

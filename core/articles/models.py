@@ -6,8 +6,6 @@ from core.users.models import CustomUser
 
 import uuid
 
-# Create your models here.
-
 
 class Article(models.Model):
 
@@ -73,27 +71,3 @@ class ImageArticle(models.Model):
 
     class Meta:
         ordering = ('-created_at',)
-
-
-class Order(models.Model):
-    STATUS_CHOICES = (('pending', 'Pending'),
-                      ('delivered', 'Deliverded'),)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey(
-        CustomUser, null=True, on_delete=models.SET_NULL)
-    seller_if = models.UUIDField(default=1)
-    status = models.CharField(
-        max_length=10, choices=STATUS_CHOICES, default=None)
-    ordered = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class OrderItem(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    articles = models.ForeignKey(
-        Article, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(
-        Order, on_delete=models.SET_NULL, null=True)
-    ordered = models.BooleanField(default=False)
-    quantity = models.IntegerField(default=1, null=True, blank=True)

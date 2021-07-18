@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'core.articles.apps.ArticleConfig',
     'core.users.apps.UserConfig',
     'core.store.apps.StoreConfig',
+    'core.cart.apps.CartConfig',
     'widget_tweaks',
 ]
 

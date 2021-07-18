@@ -67,10 +67,7 @@
 						<a class="active nav-link px-2 link-secondary" aria-current="page" href="{% url 'store.home_page' %}">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Customers</a>
-					</li>
-					<li class="nav-item">
-						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Products</a>
+						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Cart</a>
 					</li>
 				</ul>
 				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -106,6 +103,23 @@
 		</div>
 	</nav>
 
+	{% if messages %}
+		{% for msg in messages %}
+			<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+				<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+					<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+				</symbol>
+			</svg>
+
+			<div class="alert alert-success d-flex align-items-center px-5" role="alert">
+				<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+				<div>
+					{{ msg }}
+				</div>
+			</div>
+		{% endfor %}
+		
+	{% endif %}
 
 	<main class="container my-5">
 		{% block content %}{% endblock content %}

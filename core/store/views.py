@@ -23,5 +23,4 @@ class ArticleListView(ListView):
                 if article.id == image_article.article_id:
                     article.image_article = image_article
 
-        # print('imagen', context['object_list'][0].image_article.url)
         return context
