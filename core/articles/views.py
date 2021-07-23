@@ -47,7 +47,7 @@ class ArticleFormView(FormView):
             new_item = form.save(commit=False)
             new_item.article = article
             new_item.order = order
-            if verify_stock(article.stock, quantity):
+            if article.stock >= quantity:
                 new_item.quantity = int(form.cleaned_data['quantity'])
                 new_item.save()
                 messages.success(self.request,
@@ -70,7 +70,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     form_class = CreateArticleForm
     # TODO When the article was created, redirect to the new article
-    success_url = reverse_lazy('store.home_page')
+    success_url = reverse_lazy('article:create')
 
     def form_valid(self, form):
         article = form.save(commit=False)
