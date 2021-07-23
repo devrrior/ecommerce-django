@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if empty == False %}
+  <div class="row"> 
+    <div class="col-10"> 
+      <table class="table">
+        <thead>
+          <tr class="table-dark">
+            <th class="text-center">Image</th>
+            <th class="text-center">Title</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Price</th>
+            <!-- <th class="text-center">Total</th> -->
+            <!-- <th></th> -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in order_items %}
+          <tr>
+            <th class="text-center align-middle"><img src="{{ order_item.image.url }}" alt="hola" width="100"></th>
+            <th class="align-middle">
+              <p class="fs-5"> {{ order_item.title | truncatechars:40 }} </p>
+              <a href=" {% url 'cart:item-remove' id=order_item.id %} " class="fs-6 fw-light text-danger"> Remove </a>
+            </th>
+            <th class="text-center align-middle">
+              <div class="text-center">
+                <a href="{% url 'cart:item-increase' id=order_item.id %}" class="btn btn-dark btn-sm mx-2 fs-5">+</a>
+                {{ order_item.quantity }}
+                <a href="{% url 'cart:item-decrease' id=order_item.id %}" class="btn btn-dark btn-sm mx-2 fs-5">-</a>
+                <p class="fs-6 my-2"><small>Stock: {{ order_item.stock }}</small></p>
+            </th>
+            <th class="text-center align-middle">${{ order_item.total }}</th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-2">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title my-1">Total ${{ order_total }}</h5>
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success mb-3">Buy now</button>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endif %}
+  <div class="card w-50 mx-auto">
+    <div class="card-body">
+      <h5 class="h1 card-title">Your cart is empty</h5>
+      <p class="card-text">Not sure what to buy? Thousands of products await you!</p>
+      <a href="{% url 'store:index' %}" class="btn btn-primary">Go to buy!</a>
+    </div>
+  </div>
+{% endblock content %}

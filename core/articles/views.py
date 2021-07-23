@@ -1,14 +1,14 @@
 # TODO check if the article's stock > 0 display
+from core.cart.utils import verify_stock
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-
 from core.articles.models import Article, ImageArticle
-from core.cart.models import Order, OrderItem
+from core.cart.models import Order
 
 from core.articles.forms import CreateArticleForm, AddToCartForm
 
@@ -21,29 +21,39 @@ class ArticleFormView(FormView):
         return get_object_or_404(Article, slug=self.kwargs['slug'])
 
     def get_success_url(self):
-        return reverse_lazy('store.home_page')
+        return reverse_lazy('cart:summary')
 
     def form_valid(self, form):
         # TODO check if order_item.quantity <= stocke
 
         customer = self.request.user
-        order = Order.objects.get_or_create(
-            customer=customer, ordered=False)[0]
+        order = Order.objects.get_or_create(customer=customer,
+                                            ordered=False)[0]
         article = self.get_object()
         item_filter = order.orderitem_set.filter(article_id=article.id)
+        quantity = int(form.cleaned_data['quantity'])
 
         if item_filter.exists():
             item = item_filter.first()
-            item.quantity += int(form.cleaned_data['quantity'])
-            item.save()
-            messages.success(self.request, 'The item was created in the cart')
+            if verify_stock(article.stock, quantity):
+                item.quantity += quantity
+                item.save()
+                messages.success(self.request,
+                                 'The item was created in the cart')
+            else:
+                messages.warning(self.request, 'There is not enough stock')
+
         else:
             new_item = form.save(commit=False)
             new_item.article = article
             new_item.order = order
-            new_item.quantity = int(form.cleaned_data['quantity'])
-            new_item.save()
-            messages.success(self.request, 'The item was created in the cart')
+            if verify_stock(article.stock, quantity):
+                new_item.quantity = int(form.cleaned_data['quantity'])
+                new_item.save()
+                messages.success(self.request,
+                                 'The item was created in the cart')
+            else:
+                messages.warning(self.request, 'There is not enough stock')
 
         return super(ArticleFormView, self).form_valid(form)
 
@@ -72,7 +82,9 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
         for image in images:
             order += 1
-            ImageArticle.objects.create(
-                article=article, image=image, article_status=article.status, order=order)
+            ImageArticle.objects.create(article=article,
+                                        image=image,
+                                        article_status=article.status,
+                                        order=order)
 
-        return super().form_valid(form)
+        return super(ArticleCreateView, self).form_valid(form)

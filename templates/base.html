@@ -15,7 +15,6 @@
 
 <body>
 
-
 	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
 		<symbol id="ecommerce" viewBox="0 0 512.005 512.005">
 			<title>Ecommerce</title>
@@ -28,17 +27,65 @@
 		<div class="container-fluid">
 			<!-- USER -->
 			{% if user.is_authenticated %}
-				<div class="dropdown text-end mobile-icon">
+			<div class="dropdown text-end mobile-icon">
+				<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+					data-bs-toggle="dropdown" aria-expanded="false">
+					{% if user.profile_picture %}
+					<img src="{{ user.profile_picture.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
+					{% else %}
+					<img src="{% static 'images/profile-picture.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+					{% endif %}
+				</a>
+				<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+					<li><a class="dropdown-item" href="{% url 'article:create' %}">New article...</a></li>
+					<li><a class="dropdown-item" href="#">Settings</a></li>
+					<li><a class="dropdown-item" href="#">Profile</a></li>
+					<li>
+						<hr class="dropdown-divider">
+					</li>
+					<li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+				</ul>
+			</div>
+			{% endif %}
+
+
+			<a href="{% url 'store:index' %}" class="navbar-brand">
+				<svg class="bi me-2" width="54" height="54" role="img" aria-label="Ecommerce">
+					<use xlink:href="#ecommerce" /></svg>
+			</a>
+
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="active nav-link px-2 link-secondary" aria-current="page"
+							href="{% url 'store:index' %}">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="active nav-link px-2 link-secondary" aria-current="page" href="{% url 'cart:summary' %}">Cart</a>
+					</li>
+				</ul>
+				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+					<input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+				</form>
+				{% if user.is_authenticated %}
+				<!-- User -->
+				<div class="dropdown text-end mobile-icon1">
 					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
 						data-bs-toggle="dropdown" aria-expanded="false">
 						{% if user.profile_picture %}
-							<img src="{{ user.profile_picture.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
+						<img src="{{ user.profile_picture.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
 						{% else %}
-							<img src="{% static 'images/profile-picture.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+						<img src="{% static 'images/profile-picture.png' %}" alt="mdo" width="32" height="32"
+							class="rounded-circle">
 						{% endif %}
 					</a>
 					<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-						<li><a class="dropdown-item" href="{% url 'article.create_article' %}">New article...</a></li>
+						<li><a class="dropdown-item" href="{% url 'article:create' %}">New article...</a></li>
 						<li><a class="dropdown-item" href="#">Settings</a></li>
 						<li><a class="dropdown-item" href="#">Profile</a></li>
 						<li>
@@ -47,53 +94,6 @@
 						<li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
 					</ul>
 				</div>
-				{% endif %}
-
-
-			<a href="{% url 'store.home_page' %}" class="navbar-brand">
-				<svg class="bi me-2" width="54" height="54" role="img" aria-label="Ecommerce">
-					<use xlink:href="#ecommerce" /></svg>
-			</a>
-
-
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item">
-						<a class="active nav-link px-2 link-secondary" aria-current="page" href="{% url 'store.home_page' %}">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="active nav-link px-2 link-secondary" aria-current="page" href="#">Cart</a>
-					</li>
-				</ul>
-				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-					<input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-				</form>
-				{% if user.is_authenticated %}
-					<!-- User -->
-					<div class="dropdown text-end mobile-icon1">
-					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
-						data-bs-toggle="dropdown" aria-expanded="false">
-						{% if user.profile_picture %}
-							<img src="{{ user.profile_picture.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
-						{% else %}
-							<img src="{% static 'images/profile-picture.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
-						{% endif %}
-					</a>
-					<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-						<li><a class="dropdown-item" href="{% url 'article.create_article' %}">New article...</a></li>
-						<li><a class="dropdown-item" href="#">Settings</a></li>
-						<li><a class="dropdown-item" href="#">Profile</a></li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-						<li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
-					</ul>
-				</div>				
 				{% else %}
 				<a href="{% url 'login' %}" type="button" class="btn btn-primary">Login</a>
 				<a href="{% url 'signup' %}" type="button" class="btn btn-secondary">Sign Up</a>
@@ -104,21 +104,30 @@
 	</nav>
 
 	{% if messages %}
-		{% for msg in messages %}
-			<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-				<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-					<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-				</symbol>
-			</svg>
+	{% for msg in messages %}
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+		<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+			<path
+				d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+		</symbol>
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+    </symbol>
+	</svg>
 
-			<div class="alert alert-success d-flex align-items-center px-5" role="alert">
-				<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-				<div>
-					{{ msg }}
-				</div>
-			</div>
-		{% endfor %}
-		
+  <div class="alert alert-{{ msg.tags }} d-flex align-items-center px-5" role="alert">
+		<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+      {% if msg.tags == 'success' %}
+        <use xlink:href="#check-circle-fill" /></svg>
+      {% else %}
+        <use xlink:href="#exclamation-triangle-fill"/></svg>
+      {% endif %}
+		<div>
+			{{ msg }}
+		</div>
+	</div>
+	{% endfor %}
+
 	{% endif %}
 
 	<main class="container my-5">

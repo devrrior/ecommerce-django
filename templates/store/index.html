@@ -3,39 +3,40 @@
 {% block content %}
 {% block head %}
 <style>
-	.title-link{
+	.title-link {
 		text-decoration: none;
-	}	
+	}
 
-	.title-link:hover{
+	.title-link:hover {
 		color: #777575;
 		text-decoration: underline;
 	}
-
-</style>	
+</style>
 {% endblock head %}
 <div>
-<!-- ((article.imagearticle_set.all())[0]).image.url -->
+	<!-- ((article.imagearticle_set.all())[0]).image.url -->
 	<h2 class="text-center">Lastest Articles</h2>
 	<div class="row p-2 bd-highlight">
 	</div>
 	<div class="row g-8 p-4">
 
 		{% for article in object_list %}
-			<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xxl-2.4 my-2">
-				<div class="card">
-					<a href="{% url 'article.detail_article' article.slug %}">
-						<img src={{ article.image_article.image.url }} class="card-img-top" alt={{ article.title }} height="200" style="object-fit: contain;">
-					</a>
-					<div class="card-body" style="min-height: 20%; max-height: 20%;">
-						<h5 class="card-title text-dark"><a class="title-link" href="{% url 'article.detail_article' article.slug %}">{{ article.title | truncatechars:40 }}</a></h5>
-						<p class="card-text text-body">{{ article.description | truncatechars:112 }}</p>
-						<p class="d-inline">Price:</p>
-						<p class="d-inline" style="color: #4baa23; text-decoration: underline;">${{ article.price }}</p>
-						<p class="d-inline">dls</p>
-					</div>
+		<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xxl-2.4 my-2">
+			<div class="card">
+				<a href="{% url 'article:show' article.slug %}">
+					<img src={{ article.image_article.image.url }} class="card-img-top" alt={{ article.title }} height="200"
+						style="object-fit: contain;">
+				</a>
+				<div class="card-body" style="min-height: 120px; max-height: 120px;">
+					<h5 class="card-title text-dark"><a class="title-link"
+							href="{% url 'article:show' article.slug %}">{{ article.title | truncatechars:40 }}</a></h5>
+					<!-- <p class="card-text text-body">{{ article.description | truncatechars:112 }}</p> -->
+					<p class="d-inline">Price:</p>
+					<p class="d-inline" style="color: #4baa23; text-decoration: underline;">${{ article.price }}</p>
+					<p class="d-inline">dls</p>
 				</div>
 			</div>
+		</div>
 		{% endfor %}
 
 	</div>

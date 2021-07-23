@@ -25,8 +25,9 @@ from django_email_verification import urls as email_urls  # include the urls
 
 
 urlpatterns = [
-    path('', include('core.store.urls'), name='store'),
-    path('articles/', include('core.articles.urls'), name='articles'),
+    path('', include('core.store.urls'),),
+    path('articles/', include('core.articles.urls'),),
+    path('cart/', include('core.cart.urls'),),
     path('admin/', admin.site.urls),
     path('login/', views.LoginView.as_view(redirect_authenticated_user=True)),
     path('signup/', UserCreateView.as_view(), name='signup'),
