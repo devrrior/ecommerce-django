@@ -1,4 +1,4 @@
-from core.cart.utils import verify_stock
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.views import View
@@ -6,6 +6,8 @@ from django.contrib import messages
 
 from core.cart.models import Order, OrderItem
 from core.articles.models import Article
+
+from core.cart.utils import verify_stock
 
 
 class CartView(TemplateView):
@@ -16,8 +18,14 @@ class CartView(TemplateView):
         context = super(CartView, self).get_context_data(**kwargs)
         context['order_items'] = []
         articles = Article.objects.all().only()
-        order = Order.objects.get(customer_id=self.request.user.id,
-                                  ordered=False)
+
+        try:
+            order = Order.objects.get(customer_id=self.request.user.id,
+                                      ordered=False)
+        except ObjectDoesNotExist:
+            context['empty'] = True
+            return context
+
         order_items = order.orderitem_set.all().order_by('-id')
         order_total = 0
 
