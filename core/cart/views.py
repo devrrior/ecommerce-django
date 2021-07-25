@@ -51,7 +51,9 @@ class CartView(TemplateView):
             i += i
             # print(data)
         context['empty'] = context['order_items'] == []
-        context['order_total'] = order_total
+        context['order_total_without_iva'] = order_total
+        context['order_total_with_iva'] = round(
+            (order_total * .16) + order_total, 2)
         return context
 
 
