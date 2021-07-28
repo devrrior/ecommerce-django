@@ -46,13 +46,10 @@ class CartView(TemplateView):
                 "stock": article.stock,
                 "total": article.price * order_item.quantity,
                 "slug": article.slug,
-                "is_last_order_item": len(order_items) == i,
             }
-            print(data["is_last_order_item"])
             order_total += data["price"] * data["quantity"]
             context["order_items"].append(data)
             i += i
-            # print(data)
         context["empty"] = context["order_items"] == []
         context["order_total_without_iva"] = order_total
         context["order_total_with_iva"] = round((order_total * 0.16) + order_total, 2)
