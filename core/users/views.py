@@ -16,12 +16,12 @@ from core.users.forms import RegisterForm
 class UserCreateView(CreateView):
     model = CustomUser
     form_class = RegisterForm
-    template_name = "registration/signup.html"
-    success_url = reverse_lazy("login")
+    template_name = 'registration/signup.html'
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         new_user = form.save()
-        messages.success(self.request, "Account Created successfully")
+        messages.success(self.request, 'Account Created successfully')
 
         returnVal = super(UserCreateView, self).form_valid(form)
 
