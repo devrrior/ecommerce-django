@@ -7,6 +7,7 @@ from core.users.models import CustomUser
 import uuid
 
 
+
 class Article(models.Model):
     class ArticleObjects(models.Manager):
         def get_queryset(self):
@@ -21,14 +22,15 @@ class Article(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField()
-    price = models.PositiveIntegerField()
+    price = models.PositiveBigIntegerField(
+        default=0
+    )  # here will store in cents NOT dollars
     stock = models.PositiveIntegerField()
     slug = models.SlugField(blank=True, unique=True, max_length=256)
-    status = models.CharField(max_length=10,
-                              choices=STATUS_CHOICES,
-                              default='draft')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
     objects = models.Manager()
     articleobjects = ArticleObjects()
@@ -37,7 +39,7 @@ class Article(models.Model):
         return self.title
 
     class Meta:
-        ordering = ('-created_at', )
+        ordering = ('-created_at',)
 
 
 def set_slug(sender, instance, *args, **kwargs):
@@ -52,8 +54,7 @@ pre_save.connect(set_slug, sender=Article)
 class ImageArticle(models.Model):
     class ImageArticleObjects(models.Manager):
         def get_queryset(self):
-            return super().get_queryset().filter(article_status='published',
-                                                 order=1)
+            return super().get_queryset().filter(article_status='published', order=1)
 
     STATUS_CHOICES = (
         ('draft', 'Draft'),
@@ -62,11 +63,13 @@ class ImageArticle(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="images/article/", )
+    image = models.ImageField(
+        upload_to='images/article/',
+    )
     order = models.PositiveIntegerField()
-    article_status = models.CharField(max_length=10,
-                                      choices=STATUS_CHOICES,
-                                      default='draft')
+    article_status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='draft'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -77,4 +80,4 @@ class ImageArticle(models.Model):
         return f'{self.article.title}-{self.id}'
 
     class Meta:
-        ordering = ('-created_at', )
+        ordering = ('-created_at',)

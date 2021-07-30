@@ -103,8 +103,12 @@
           </ul>
 
           <div class="d-grid mb-2">
-            <a href="{% url 'cart:checkout' %}" class="btn btn-success btn-block waves-effect waves-light">Go to
-              checkout</a>
+            <!-- <a href="{% url 'cart:create-checkout-session' %}" class="btn btn-success btn-block waves-effect waves-light">Go to -->
+              <!-- checkout</a> -->
+            <form action="{% url 'cart:create-checkout-session' %}" method="POST">
+              {% csrf_token %}
+              <button type="" class="btn btn-success btn-block waves-effect waves-light">Go to checkout</button> 
+            </form>
           </div>
 
         </div>
