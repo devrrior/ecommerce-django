@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: ecommerce_django
-    env_file: .env
+    env_file: ./config/.env
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
@@ -18,7 +18,7 @@ services:
   pgdb:
     image: postgres:9.6.22-alpine
     container_name: pgdb
-    env_file: .env
+    env_file: ./config/.env
     volumes:
       - ./ecommerce-postgres:/var/lib/postgresql/data
     ports:
