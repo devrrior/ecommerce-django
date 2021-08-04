@@ -1,1 +1,11 @@
-Success!
+{% extends 'base.html' %}
+{% block content %}
+<div class="card w-50 mx-auto">
+  <div class="card-body">
+    <h5 class="h1 card-title">Payment Success!</h5>
+    <p class="card-text">Thanks for your purchase. Check your email to track your package and see the details of your purchase</p>
+    <a href="{% url 'store:index' %}" class="btn btn-primary">Go to home!</a>
+  </div>
+</div>
+
+{% endblock content%}

@@ -13,6 +13,9 @@ class Article(models.Model):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
 
+    class Meta:
+        ordering = ('-created_at',)
+
     STATUS_CHOICES = (
         ('draft', 'Draft'),
         ('published', 'Published'),
@@ -38,8 +41,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-    class Meta:
-        ordering = ('-created_at',)
+    @property
+    def get_display_price(self):
+        return self.price / 100 # type: ignore
 
 
 def set_slug(sender, instance, *args, **kwargs):

@@ -30,9 +30,8 @@
 				<div class="card-body" style="min-height: 120px; max-height: 120px;">
 					<h5 class="card-title text-dark"><a class="title-link"
 							href="{% url 'article:show' article.slug %}">{{ article.title | truncatechars:40 }}</a></h5>
-					<!-- <p class="card-text text-body">{{ article.description | truncatechars:112 }}</p> -->
 					<p class="d-inline">Price:</p>
-					<p class="d-inline" style="color: #4baa23; text-decoration: underline;">${{ article.price }}</p>
+					<p class="d-inline" style="font-weight: 900">${{ article.get_display_price }}</p>
 					<p class="d-inline">dls</p>
 				</div>
 			</div>

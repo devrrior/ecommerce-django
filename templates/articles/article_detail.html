@@ -25,7 +25,7 @@
 		<div>
 			<p>{{ article.description }}</p>
 			<p>Stock: {{ article.stock }}</p>
-			<p style="display: inline-block;">Price: ${{ article.price }} dls</p>
+			<p style="display: inline-block;">Price: ${{ article.get_display_price }} dls</p>
 		</div>
 		<div>
 			<form method="POST">

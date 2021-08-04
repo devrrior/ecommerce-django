@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -22,51 +24,40 @@ class CancelView(TemplateView):
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         order = Order.objects.get(customer_id=self.request.user.id, ordered=False)  # type: ignore
-        # order_items = order.orderitem_set.all().order_by('-id')
-        order_item = order.orderitem_set.first()
-        # articles = Article.objects.all()
-        article = Article.objects.get(id=order_item.article_id)
-        # order_item = OrderItem.objects.first()  # type:ignore
-        YOUR_DOMAIN = 'http://127.0.0.1:8000'
-        
-#         for order_item in order_items:
-#             article = articles.filter(id=order_item.article_id).first()
-# 
-#             line_item = {
-#                 {
-#                     'price_data': {
-#                         'currency': 'usd',
-#                         'unit_amount': article.price,
-#                         'product_data': {
-#                             'name': article.title,
-#                             # 'images': ''
-#                         },
-#                     },
-#                     'quantity': order_item.quantity,
-#                 },
-#             }
-# 
+        order_items = order.orderitem_set.all().order_by('-id')
+        articles = Article.objects.all()
+        line_items = []
+
+        for item in order_items:
+            article = articles.filter(id=item.article_id).first()
+            price_object = {
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': article.price,
+                    'product_data': {
+                        'name': article.title[:60]
+                    }
+                },
+                'quantity': item.quantity
+            }
+            line_items.append(price_object)
+
+
         try:
             checkout_session = stripe.checkout.Session.create(
-                payment_method_types=[
-                    'card',
-                ],
-                line_items=[
-                    {
-                        'price_data': {
-                            'currency': 'usd',
-                            'unit_amount': article.price,
-                            'product_data': {
-                                'name': article.title,
-                                'images': ['https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.mediaexpert.pl%2Fmedia%2Fcache%2Fresolve%2Ffilemanager_original%2Fimages%2Fdescriptions%2Fimages%2F21%2F2151973%2Fstorage_app_opisy2_huawei_562389%2Fhuawei_matebook_d14_8_pami____.jpg&f=1&nofb=1',]
-                            },
-                        },
-                        'quantity': order_item.quantity,
-                    },
-                ],
+                customer_email = self.request.user.email,
+                billing_address_collection='auto',
+                shipping_rates = ['shr_1JJ21wH70q2DLVwFniELrAcf'],
+                shipping_address_collection={
+
+                  'allowed_countries': ['US', 'CA', 'MX'],
+
+                },
+                payment_method_types=['card',],
+                line_items = line_items,
                 mode='payment',
-                success_url = YOUR_DOMAIN + '/success',
-                cancel_url = YOUR_DOMAIN + '/cancel',
+                success_url = self.request.build_absolute_uri(reverse('cart:process-succeed')),
+                cancel_url = self.request.build_absolute_uri(reverse('cart:process-canceled')),
             )
 
         except Exception as e:
@@ -102,8 +93,11 @@ class CartView(TemplateView):
         order_items = order.orderitem_set.all().order_by('-id')
         order_total = 0
 
-        i = 1
+        index_last_item = len(order_items)
+        i = 0
         for order_item in order_items:
+
+            i += 1
 
             article = articles.filter(id=order_item.article_id).first()
             article_image = article.imagearticle_set.get(order=1).image
@@ -111,18 +105,22 @@ class CartView(TemplateView):
                 'id': order_item.id,
                 'image': article_image,
                 'title': article.title,
-                'price': article.price,
+                'price': article.get_display_price,
                 'quantity': order_item.quantity,
                 'stock': article.stock,
                 'total': article.price * order_item.quantity,
                 'slug': article.slug,
             }
+            if i == index_last_item:
+                data['last_item'] = True
+            else:
+                data['last_item'] = False
+
             order_total += data['price'] * data['quantity']
             context['order_items'].append(data)
-            i += i
+
         context['empty'] = context['order_items'] == []
-        context['order_total_without_iva'] = order_total
-        context['order_total_with_iva'] = round((order_total * 0.16) + order_total, 2)
+        context['order_total'] = order_total
         context['length_order_items'] = len(order_items)
         return context
 

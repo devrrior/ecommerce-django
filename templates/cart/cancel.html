@@ -1,1 +1,10 @@
-Cancel :(
+{% extends 'base.html' %}
+{% block content %}
+<div class="card w-50 mx-auto">
+  <div class="card-body">
+    <h5 class="h1 card-title">Process Canceled</h5>
+    <p class="card-text">Forgot to add something to your cart? Shop around then come back to pay!</p>
+    <a href="{% url 'cart:summary' %}" class="btn btn-primary">Go to cart!</a>
+  </div>
+</div>
+{% endblock cancel %}

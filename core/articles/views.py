@@ -27,7 +27,7 @@ class ArticleFormView(FormView):
         # TODO check if order_item.quantity <= stocke
 
         customer = self.request.user
-        order = Order.objects.get_or_create(customer=customer, ordered=False)[0]
+        order = Order.objects.get_or_create(customer=customer, ordered=False)[0] # type: ignore
         article = self.get_object()
         item_filter = order.orderitem_set.filter(article_id=article.id)
         quantity = int(form.cleaned_data['quantity'])
