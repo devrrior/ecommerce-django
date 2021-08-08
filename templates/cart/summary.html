@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Ecommerce - Cart{% endblock %}
 {% block content %}
-{% if empty == False %}
+{% if empty == null %}
 <!--Section: Block Content-->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down"
   id="chevron-down" viewBox="0 0 16 16" style="display: none;">
@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-            {% if order_item.last_item == False %}
+            {% if order_item.last_item != True %}
             <hr class="mb-4">
             {% endif %}
           {% endfor %}
@@ -95,7 +95,7 @@
           <form action="{% url 'cart:create-checkout-session' %}" method="POST" class="d-gid mb-2">
             <div class="d-grid mb-2">
                 {% csrf_token %}
-                <button type="" class="btn btn-success btn-block waves-effect waves-light">Go to checkout</button> 
+                <button type="" class="btn btn-success btn-block waves-effect waves-light">Go to checkout</button>
             </div>
           </form>
 
