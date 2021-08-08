@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     'core.store.apps.StoreConfig',
     'core.cart.apps.CartConfig',
     'widget_tweaks',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -187,3 +189,12 @@ AUTH_USER_MODEL = 'users.CustomUser'
 STRIPE_PUBLIC_KEY = ''
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = ''
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '0.0.0.0',
+]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: not request.is_ajax()
+}
