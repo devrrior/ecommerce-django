@@ -1,5 +1,4 @@
 # TODO check if the article's stock > 0 display
-from core.cart.utils import verify_stock
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
