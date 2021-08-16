@@ -7,7 +7,6 @@ from core.users.models import CustomUser
 import uuid
 
 
-
 class Article(models.Model):
     class ArticleObjects(models.Manager):
         def get_queryset(self):
@@ -30,10 +29,10 @@ class Article(models.Model):
     )  # here will store in cents NOT dollars
     stock = models.PositiveIntegerField()
     slug = models.SlugField(blank=True, unique=True, max_length=256)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
     objects = models.Manager()
     articleobjects = ArticleObjects()
@@ -43,7 +42,7 @@ class Article(models.Model):
 
     @property
     def get_display_price(self):
-        return self.price / 100 # type: ignore
+        return self.price / 100  # type: ignore
 
 
 def set_slug(sender, instance, *args, **kwargs):
@@ -66,7 +65,9 @@ class ImageArticle(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name='imagearticles'
+    )
     image = models.ImageField(
         upload_to='images/article/',
     )
