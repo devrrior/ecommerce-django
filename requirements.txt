@@ -9,6 +9,7 @@ Django==3.2.5
 django-debug-toolbar==3.2.1
 django-email-verification==0.1.0
 django-environ==0.4.5
+django-querycount==0.7.0
 django-widget-tweaks==1.4.8
 idna==3.2
 mccabe==0.6.1
