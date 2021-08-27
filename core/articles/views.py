@@ -24,27 +24,33 @@ class ArticleFormView(FormView):
         return reverse_lazy('cart:summary')
 
     def form_valid(self, form):
-        # TODO check if order_item.quantity <= stock
+        # TODO improve method
 
         customer_id = self.request.user.id
         article_id = self.kwargs['slug'][-36:]
         quantity = int(form.cleaned_data['quantity'])
-        order = Order.objects.get_or_create(
+        order, order_created = Order.objects.get_or_create(
             customer_id=customer_id, ordered=False)
-        (order_item, order_item_created,) = OrderItem.objects.select_related(
+
+        order_item, order_item_created = OrderItem.objects.select_related(
             'article'
         ).get_or_create(
-            article_id=article_id, order_id=order[0].id, defaults={
-                'quantity': quantity}
+            article_id=article_id, order_id=order.id,
         )
-        article = order_item.article
 
-        if not order_item_created and article.stock >= order_item.quantity + quantity:
-            print('si puedes -----')
+        article_stock = order_item.article.stock
+        enough_stock_of_article = article_stock >= order_item.quantity + quantity
+
+        if order_item_created and enough_stock_of_article:
+            order_item.quantity = quantity
+            order_item.save()
+            messages.success(self.request, 'The item was created in the cart')
+        elif not order_item_created and enough_stock_of_article:
             order_item.quantity += quantity
             order_item.save()
             messages.success(self.request, 'The item was created in the cart')
         else:
+            order_item.delete()
             messages.warning(self.request, 'There is not enough stock')
 
         return super(ArticleFormView, self).form_valid(form)
