@@ -8,11 +8,13 @@ from core.cart.views import (
     Checkout,
     CreateCheckoutSessionView,
     SuccessView,
+    stripe_webhook,
 )
 
 app_name = 'cart'
 urlpatterns = [
     path('cart/', CartView.as_view(), name='summary'),
+    path('webhooks/stripe/', stripe_webhook, name='stripe-webhook'),
     path(
         'cart/item/increase/<uuid:id>',
         IncreaseQuantityOrderItemView.as_view(),

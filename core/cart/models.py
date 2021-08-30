@@ -38,10 +38,14 @@ class Order(models.Model):
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     article = models.ForeignKey(
-        Article, on_delete=models.SET_NULL, null=True, related_name='articles'
+        Article, on_delete=models.SET_NULL, null=True, related_name='orderitems'
     )
     order = models.ForeignKey(
-        Order, on_delete=models.SET_NULL, null=True, related_name='orders'
+        Order, on_delete=models.SET_NULL, null=True, related_name='orderitems'
     )
     # cover_image = ForeignKey()
     quantity = models.IntegerField(default=1, null=True, blank=True)
+
+    def item_sold(self):
+        self.article.stock -= self.quantity
+        self.article.save()
