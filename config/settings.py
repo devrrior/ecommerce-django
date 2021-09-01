@@ -52,11 +52,9 @@ INSTALLED_APPS = [
     'core.store.apps.StoreConfig',
     'core.cart.apps.CartConfig',
     'widget_tweaks',
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
-    'querycount.middleware.QueryCountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -140,18 +138,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-# Static Configuration
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
-# Media Configuration
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Email Verification Config
 
@@ -175,9 +161,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('DJANGO_EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')
-
+EMAIL_HOST_USER = env.str('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = 'limwwcouzrnbcmhm'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -189,13 +174,35 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Stripe Config
 STRIPE_PUBLIC_KEY = ''
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
-STRIPE_WEBHOOK_SECRET = ''
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-    '0.0.0.0',
-]
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+    # MIDDLEWARE += ['querycount.middleware.QueryCountMiddleware']
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: not request.is_ajax()
-}
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+    # Static Configuration
+
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+    # Media Configuration
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+    INTERNAL_IPS = [
+        '127.0.0.1',
+        '0.0.0.0',
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda request: not request.is_ajax()
+    }
+
+    # EMAIL_BACKEND = "naomi.mail.backends.naomi.NaomiBackend"
+    # EMAIL_FILE_PATH = '/Users/fernando/dev/ecommerce/mails/tmp'

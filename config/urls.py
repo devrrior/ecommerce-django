@@ -1,4 +1,3 @@
-import debug_toolbar
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
@@ -28,8 +27,10 @@ urlpatterns = [
     path('signup/', UserCreateView.as_view(), name='signup'),
     path('email/', include(email_urls)),  # connect them to an arbitrary path
     path('', include('django.contrib.auth.urls')),
-    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += path('__debug__/', include(debug_toolbar.urls)),
