@@ -31,6 +31,10 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
     )
 
+    def completed(self):
+        self.ordered = True
+        self.save()
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

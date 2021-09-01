@@ -227,6 +227,11 @@
       }
     }
 
+    th {
+      text-align: inherit;
+      text-align: -webkit-match-parent;
+    }
+
     thead,
     tbody,
     tfoot,
@@ -237,14 +242,37 @@
       border-style: solid;
       border-width: 0;
     }
+
+    th {
+      border: 1px solid black;
+    }
+
+    td,
+    th {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+    }
   </style>
+
 </head>
 
 <body>
-  <h3>Thanks {{ name }} for your purchase! {{updated_at}}</h3>
+  <h3>Hi, someone bought your product(s) {{updated_at}}</h3>
 
-  <p>In the next days, you will receive a email with instructions</p>
-  <p>You spent <b>${{ amount_total }} dls</b>. You bought the following:</p>
+  <p>In the next days, you must to send it/them to the parcel. When you have sent the order, you must enter the guide
+    number in our website.</p>
+  <p>The customer's address is the following:</p>
+  <p>Name: {{ customer_shipping.name}}</p>
+  <p>City: {{ customer_shipping.address.city }}</p>
+  <p>Country: {{ customer_shipping.address.country }}</p>
+  <p>Line 1: {{ customer_shipping.address.line1 }}</p>
+  {% if customer_shipping.address.line2 != None %}
+  <p>Line 2: {{ customer_shipping.address.line2 }}</p>
+  {% endif %}
+  <p>Postal code: {{ customer_shipping.address.postal_code }}</p>
+  <p>State: {{ customer_shipping.address.state }}</p>
+
+  <p>The product(s) which was bough is/are the following:</p>
   <br>
   <table class="table">
     <thead>
@@ -256,7 +284,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for item in order_items %}
+      {% for item in products_bought %}
       <tr>
         <td>{{ item.title }}</td>
         <td>${{ item.price }} dls</td>

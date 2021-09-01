@@ -3,7 +3,7 @@ from core.articles.models import Article
 from core.cart.models import Order, OrderItem
 from django.conf import settings
 from django.contrib import messages
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
@@ -182,46 +182,84 @@ def stripe_webhook(request):
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
 
-        customer_email = session['customer_details']['email']
+        customer_name = session['shipping']['name']
+        customer_email = session['customer_email']
+        customer_shipping = session['shipping']
+        amount_total = session['amount_total'] / 100
 
         order_id = session['metadata']['order_id']
-        order = Order.objects.get(id=order_id)
-        order.ordered = True
-        order.save()
+        order = Order.objects.prefetch_related('orderitems').get(id=order_id)
+        # order.completed()
         order_items = order.orderitems.all()
 
-        amount_total = session['amount_total'] / 100
         order_items_data = []
+        products_bought = {}
 
         for item in order_items:
-            item.item_sold()
-            order_item = {
+
+            # item.item_sold()
+
+            article_data = {
                 'title': item.article.title[:90] + '...',
                 'price': item.article.price / 100,
                 'quantity': item.quantity,
                 'total': (item.article.price / 100) * item.quantity,
             }
 
-            order_items_data.append(order_item)
+            order_items_data.append(article_data)
 
-        context = {
+            seller_email = item.article.author.email 
+
+            if seller_email in products_bought:
+                products_bought[seller_email].append(article_data)
+            else:
+                products_bought[seller_email] = [article_data]
+
+        # print(products_bought)
+
+        order_data = {
             'amount_total': amount_total,
             'updated_at': order.updated_at,
             'order_items': order_items_data,
-            'name': order.customer.first_name,
+            'name': customer_name,
         }
 
-        template = get_template('cart/success_purchase.html')
-        content = template.render(context)
-        email = EmailMultiAlternatives(
-            f'Success purchase! Your order id is {order_id}',
-            'Test',
-            settings.EMAIL_HOST_USER,
-            [customer_email]
-        )
 
-        email.attach_alternative(content, 'text/html')
-        email.send()
+        # send a mail to customer
+# 
+#         template = get_template('cart/success_purchase.html')
+#         html_content = template.render(order_data)
+#         subject, from_email, to = f'Success purchase! Your order id is {order_id}', settings.EMAIL_HOST_USER, [customer_email]
+# 
+#         email = EmailMessage(subject, html_content, from_email, to)
+#         email.content_subtype = 'html'
+#         email.send()
+# 
+# 
+# 
+
+        # send a mail to seller
+
+        for email in products_bought:
+            order_data = {
+                'amount_total': amount_total,
+                'updated_at': order.updated_at,
+                'products_bought': list(products_bought[email]),
+                'customer_name': customer_name,
+                'customer_shipping': customer_shipping
+            }
+
+            print(order_data['customer_shipping'])
+
+            template = get_template('cart/product_bought.html')
+            html_content = template.render(order_data)
+            subject, from_email, to = 'Product bought! You had better send your product', settings.EMAIL_HOST_USER, [email]
+
+            email = EmailMessage(subject,html_content,from_email,to)
+            email.content_subtype= 'html'
+            email.send()
+ 
 
     # Passed signature verification
     return HttpResponse(status=200)
+
