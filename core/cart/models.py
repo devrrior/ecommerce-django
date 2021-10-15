@@ -42,7 +42,9 @@ class Order(models.Model):
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     article = models.ForeignKey(
-        Article, on_delete=models.SET_NULL, null=True, related_name='orderitems'
+        Article, on_delete=models.SET_NULL,
+        null=True,
+        related_name='orderitems'
     )
     order = models.ForeignKey(
         Order, on_delete=models.SET_NULL, null=True, related_name='orderitems'
