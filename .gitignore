@@ -2,6 +2,7 @@
 .vim
 .vscode/
 ecommerce-postgres/
+.DS_Store
 
 ### Django ###
 *.log
