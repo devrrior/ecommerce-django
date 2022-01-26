@@ -22,6 +22,7 @@ urlpatterns = [
         '',
         include('core.cart.urls'),
     ),
+    path('',include('core.users.urls')),
     path('admin/', admin.site.urls),
     path('login/', views.LoginView.as_view(redirect_authenticated_user=True)),
     path('signup/', UserCreateView.as_view(), name='signup'),
