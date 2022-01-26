@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Ecommerce - My Purchases{% endblock title %}
+{% block content %}
+  {% for order in object_list %}
+  <h2> {{ order }} </h2>
+  <p> {{order.total }}</p>
+  {% endfor %}
+{% endblock content %}

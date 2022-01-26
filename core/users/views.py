@@ -1,6 +1,8 @@
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.views.generic.list import ListView
+from core.cart.models import Order
 
 from django_email_verification import send_email
 
@@ -28,3 +30,11 @@ class UserCreateView(CreateView):
         send_email(new_user)
 
         return returnVal
+
+
+class OrderListView(ListView):
+    model = Order
+    template_name = 'users/my_purchases.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(ordered=True)

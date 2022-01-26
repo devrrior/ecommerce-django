@@ -1,5 +1,8 @@
-from django.urls import path, include
+from django.urls import path
+from .views import OrderListView
+
+app_name = 'users'
 
 urlpatterns = [
-    # Registration User Page
+    path('my_purchases/', OrderListView.as_view(), name='my_purchases'),
 ]
