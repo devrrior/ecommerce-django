@@ -28,9 +28,11 @@ urlpatterns = [
     path(
         'cart/item/remove/<uuid:id>', RemoveOrderItemView.as_view(), name='item-remove'
     ),
+    # That we dont use anymore idk why
     path('checkout/', Checkout.as_view(), name='checkout'),
     path('order/success/', SuccessView.as_view(), name='process-succeed'),
     path('order/cancel/', CancelView.as_view(), name='process-canceled'),
+    # TODO Figure out how works that
     path(
         'create-checkout-session/',
         CreateCheckoutSessionView.as_view(),
